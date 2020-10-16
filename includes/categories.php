@@ -2,6 +2,7 @@
 
 class Categories {
   public $conn;
+  private $allCategories = null;
 
   function __construct($con)
   {
@@ -16,7 +17,16 @@ class Categories {
 
     $stmt = $this->conn->prepare($query);
     $stmt->execute();
-    return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    $result = $stmt->get_result();
+
+    $set = array();
+
+    while($value = $result->fetch_assoc()) {
+      $set[$value['category_id']] = $value;
+    }
+
+    $this->allCategories = $set;
+    return $set;
   }
 
   function add() {}
@@ -24,4 +34,12 @@ class Categories {
   function exit() {}
 
   function remove() {}
+
+  function by_id($id) {
+    if(empty($this->allCategories)) {
+      $this->allCategories = $this->getAll();
+    }
+
+    return $this->allCategories[$id]['category'];
+  }
 }

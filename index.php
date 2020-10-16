@@ -80,18 +80,26 @@
     <input type="submit" value="Add to List" />
   </form>
 
-  <h2>Things To Do</h2>
-  <ul>
-    <?php foreach ($active as $index => $value) : ?>
 
-      <li>
-        <form action="index.php" method="POST">
-          <input type="checkbox" id="active<?= $index ?>" name="active<?= $index ?>" onChange='submit();' />
-          <label for="active<?= $index ?>"><?= $value['description'] ?></label>
-        </form>
-      </li>
+  <h2>Things To Do</h2>
+  <?php if (!empty($active)) : ?>
+  <table>
+    <?php foreach ($active as $index => $task) : ?>
+      <tr>
+        <td><?= $categories->by_id($task['category_id']) ?></td>
+        <td><?= $task['description'] ?></td>
+        <td><?= $task['date_due'] ?></td>
+        <td>
+          <form action="index.php" method="POST" autocomplete="off">
+            <input type="hidden" name="task_id" value="<?= $task['task_id'] ?>">
+            <button type="submit" name="action" value="complete">Complete</button>
+            <button type="submit" name="action" value="remove">X</button>
+          </form>
+        </td>
+      </tr>
     <?php endforeach; ?>
-  </ul>
+  </table>
+  <?php endif ?>
 
 
   <h2>Overdue</h2>
