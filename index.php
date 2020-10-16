@@ -1,6 +1,7 @@
 <?php
   require_once dirname(__FILE__).'/config.php';
   require_once dirname(__FILE__).'/includes/todos.php';
+  require_once dirname(__FILE__).'/includes/todo.form.php';
   require_once dirname(__FILE__).'/includes/categories.php';
 
   $connection = new MySQLi(HOST, USER, PASSWORD, DATABASE);
@@ -9,13 +10,22 @@
       die('Connection failed: ' . $connection->connect_error);
   }
 
-
-  if(filter_input(INPUT_SERVER, 'REQUEST_METHOD') === 'POST') {
-
-  }
-
   $todos = new Todos($connection);
   $categories = new Categories($connection);
+
+  if(filter_input(INPUT_SERVER, 'REQUEST_METHOD') === 'POST') {
+    $todoForm = new TodoForm($_POST['task'], $_POST['category'], $_POST['date_due']);
+
+    if($todoForm->isValid()) {
+      $todos->add($newEntry);
+    }
+
+    // echo "<pre>";
+    // print_r($todoForm);
+    // print_r($todoForm->messages);
+    // echo "</pre>";
+  }
+
 
   [$active, $overdue, $completed] = $todos->getAll();
   $allCategories = $categories->getAll();
@@ -57,11 +67,11 @@
     <label for="task">Enter a new task:</label>
     <input type="text" id="task" name="task" />
 
-    <label for="due-date">Due Date:</label>
-    <input type="date" id="due-date" name="due-date" />
+    <label for="date_due">Due Date:</label>
+    <input type="date" id="date_due" name="date_due" />
 
     <label for="category">Due Date:</label>
-    <select type="" id="category" name="catetory">
+    <select type="" id="category" name="category">
       <?php foreach ($allCategories as $index => $value) : ?>
         <option value="<?= $value['category_id'] ?>"><?= $value['category'] ?></option>
       <?php endforeach; ?>

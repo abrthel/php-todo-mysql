@@ -40,7 +40,7 @@ class Todos {
 
   function clear() {}
 
-  function add() {}
+  function add($entry) {}
 
   function complete() {}
 
