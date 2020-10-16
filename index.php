@@ -12,17 +12,17 @@
 
   $todos = new Todos($connection);
   $categories = new Categories($connection);
+  $todoForm;
 
   if(filter_input(INPUT_SERVER, 'REQUEST_METHOD') === 'POST') {
     $todoForm = new TodoForm($_POST['task'], $_POST['category'], $_POST['date_due']);
 
     if($todoForm->isValid()) {
-      $todos->add($newEntry);
+      $todos->add($todoForm->to_assoc());
     }
 
     // echo "<pre>";
     // print_r($todoForm);
-    // print_r($todoForm->messages);
     // echo "</pre>";
   }
 
@@ -30,17 +30,17 @@
   [$active, $overdue, $completed] = $todos->getAll();
   $allCategories = $categories->getAll();
 
-  echo "<pre>";
-  print_r($active);
-  echo "</pre>";
+  // echo "<pre>";
+  // print_r($active);
+  // echo "</pre>";
 
-  echo "<pre>";
-  print_r($overdue);
-  echo "</pre>";
+  // echo "<pre>";
+  // print_r($overdue);
+  // echo "</pre>";
 
-  echo "<pre>";
-  print_r($completed);
-  echo "</pre>";
+  // echo "<pre>";
+  // print_r($completed);
+  // echo "</pre>";
 
 
 

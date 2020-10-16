@@ -40,7 +40,18 @@ class Todos {
 
   function clear() {}
 
-  function add($entry) {}
+  function add($entry) {
+    $query = "
+      INSERT INTO entries (category_id, date_due, description)
+      VALUES (?, ?, ?);
+    ";
+
+    $stmt = $this->conn->prepare($query);
+    $stmt->bind_param("sss", $entry['category_id'], $entry['date_due'], $entry['description']);
+    if (!$stmt->execute()) {
+      die("DB Query Failed (".$stmt->errno."): ".$stmt->error);
+    }
+  }
 
   function complete() {}
 
