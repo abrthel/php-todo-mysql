@@ -10,8 +10,8 @@ class Todos {
 
   function getAll() {
     $query = "
-      SELECT entry_id, category_id, date_due, date_completed, description
-      FROM entries
+      SELECT task_id, category_id, date_due, date_completed, description
+      FROM tasks
     ";
 
     $stmt = $this->conn->prepare($query);
@@ -27,7 +27,7 @@ class Todos {
         array_push($completed, $record);
       } else {
 
-        if($record['date_due'] < date('Y-m-d')) {
+        if($record['date_due'] > date('Y-m-d')) {
           array_push($active, $record);
         } else {
           array_push($overdue, $record);
@@ -42,7 +42,7 @@ class Todos {
 
   function add($entry) {
     $query = "
-      INSERT INTO entries (category_id, date_due, description)
+      INSERT INTO tasks (category_id, date_due, description)
       VALUES (?, ?, ?);
     ";
 
