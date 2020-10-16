@@ -55,5 +55,16 @@ class Todos {
 
   function complete() {}
 
-  function remove() {}
+  function remove($task_id) {
+    $query = "
+      DELETE FROM tasks
+      WHERE task_id = ?;
+    ";
+
+    $stmt = $this->conn->prepare($query);
+    $stmt->bind_param("s", $task_id);
+    if (!$stmt->execute()) {
+      die("DB Query Failed (".$stmt->errno."): ".$stmt->error);
+    }
+  }
 }

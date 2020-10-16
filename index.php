@@ -2,6 +2,7 @@
   require_once dirname(__FILE__).'/config.php';
   require_once dirname(__FILE__).'/includes/todos.php';
   require_once dirname(__FILE__).'/includes/todo.form.php';
+  require_once dirname(__FILE__).'/includes/todo_action.form.php';
   require_once dirname(__FILE__).'/includes/categories.php';
 
   $connection = new MySQLi(HOST, USER, PASSWORD, DATABASE);
@@ -15,10 +16,25 @@
   $todoForm;
 
   if(filter_input(INPUT_SERVER, 'REQUEST_METHOD') === 'POST') {
-    $todoForm = new TodoForm($_POST['task'], $_POST['category'], $_POST['date_due']);
 
-    if($todoForm->isValid()) {
-      $todos->add($todoForm->to_assoc());
+    if (!empty($_POST['action'])) {
+      $todoActionForm = new TodoActionForm($_POST['action'], $_POST['task_id']);
+
+      if($todoActionForm->isValid()) {
+        switch($todoActionForm->action) {
+          case 'remove':
+            $todos->remove($todoActionForm->task_id);
+            break;
+        }
+      }
+    }
+
+    if (isset($_POST['task'])) {
+      $todoForm = new TodoForm($_POST['task'], $_POST['category'], $_POST['date_due']);
+
+      if($todoForm->isValid()) {
+        $todos->add($todoForm->to_assoc());
+      }
     }
 
     // echo "<pre>";
