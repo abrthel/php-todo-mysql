@@ -21,16 +21,21 @@
   }
 
   if(filter_input(INPUT_SERVER, 'REQUEST_METHOD') === 'POST') {
+    if(isset($_POST['action']) && $_POST['action'] === 'remove') {
+      $categories->remove($category_id);
 
-    $category = filter_input(INPUT_POST, 'category', FILTER_SANITIZE_STRING);
-    $category_id = filter_input(INPUT_POST, 'category_id', FILTER_VALIDATE_INT);
-
-    if(!$category_id){
-      $categories->add($category);
     } else {
-      $categories->edit($category_id, $category);
-    }
+      $category = filter_input(INPUT_POST, 'category', FILTER_SANITIZE_STRING);
+      $category_id = filter_input(INPUT_POST, 'category_id', FILTER_VALIDATE_INT);
 
+      if(!$category_id){
+        $categories->add($category);
+
+      } else {
+        $categories->edit($category_id, $category);
+
+      }
+    }
     header('Location: categories.php');
   }
   $connection->close();

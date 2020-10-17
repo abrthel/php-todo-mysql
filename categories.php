@@ -32,7 +32,7 @@
         <a href="/category.php?id=<?= $category['category_id'] ?>">Edit</a>
 
         <?php if(in_array($category['category_id'], $unused_categories)) : ?>
-        <form action="category.php?id=<?= $category['category_id'] ?>">
+        <form action="category.php?id=<?= $category['category_id'] ?>" method="POST">
           <button type="submit" name="action" value="remove">Remove</button>
         </form>
         <?php endif ?>
