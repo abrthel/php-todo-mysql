@@ -5,7 +5,7 @@ Create a To-Do list in PHP using MySQLi.
 
 **Trello Link** [https://trello.com/b/HQ8qQTXG/mysqli-assignment-to-do-list](https://trello.com/b/HQ8qQTXG/mysqli-assignment-to-do-list)
 
-**Unique Feature**
+**Unique Feature** Clear all Tasks
 
 ## Installation Instructions
 1. Rename config.php.sample to config.php
