@@ -53,7 +53,19 @@ class Todos {
     }
   }
 
-  function complete() {}
+  function complete($task_id) {
+    $query = "
+      UPDATE tasks
+      SET date_completed= ?
+      WHERE task_id = ?;
+    ";
+
+    $stmt = $this->conn->prepare($query);
+    $stmt->bind_param("ss", date('Y-m-d'), $task_id);
+    if (!$stmt->execute()) {
+      die("DB Query Failed (".$stmt->errno."): ".$stmt->error);
+    }
+  }
 
   function remove($task_id) {
     $query = "

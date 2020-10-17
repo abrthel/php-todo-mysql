@@ -25,6 +25,9 @@
           case 'remove':
             $todos->remove($todoActionForm->task_id);
             break;
+          case 'complete':
+            $todos->complete($todoActionForm->task_id);
+            break;
         }
       }
     }
@@ -36,10 +39,6 @@
         $todos->add($todoForm->to_assoc());
       }
     }
-
-    // echo "<pre>";
-    // print_r($todoForm);
-    // echo "</pre>";
   }
 
 
@@ -49,6 +48,11 @@
   // echo "<pre>";
   // print_r($active);
   // echo "</pre>";
+
+
+  echo "<pre>";
+  print_r(date('Y-m-d'));
+  echo "</pre>";
 
   // echo "<pre>";
   // print_r($overdue);
@@ -119,18 +123,42 @@
 
 
   <h2>Overdue</h2>
-  <ul>
-    <?php foreach ($overdue as $index => $value) : ?>
-      <li><?= $value['description'] ?></li>
+  <?php if (!empty($overdue)) : ?>
+  <table>
+    <?php foreach ($overdue as $task) : ?>
+      <tr>
+        <td><?= $categories->by_id($task['category_id']) ?></td>
+        <td><?= $task['description'] ?></td>
+        <td><?= $task['date_due'] ?></td>
+        <td>
+          <form action="index.php" method="POST" autocomplete="off">
+            <input type="hidden" name="task_id" value="<?= $task['task_id'] ?>">
+            <button type="submit" name="action" value="complete">Complete</button>
+            <button type="submit" name="action" value="remove">X</button>
+          </form>
+        </td>
+      </tr>
     <?php endforeach; ?>
-  </ul>
-
+  </table>
+  <?php endif ?>
 
   <h2>Completed</h2>
-  <ul>
-    <?php foreach ($completed as $index => $value) : ?>
-      <li><?= $value['description']?></li>
+  <?php if (!empty($completed)) : ?>
+  <table>
+    <?php foreach ($completed as $task) : ?>
+      <tr>
+        <td><?= $categories->by_id($task['category_id']) ?></td>
+        <td><?= $task['description'] ?></td>
+        <td><?= $task['date_due'] ?></td>
+        <td>
+          <form action="index.php" method="POST" autocomplete="off">
+            <input type="hidden" name="task_id" value="<?= $task['task_id'] ?>">
+            <button type="submit" name="action" value="remove">X</button>
+          </form>
+        </td>
+      </tr>
     <?php endforeach; ?>
-  </ul>
+  </table>
+  <?php endif ?>
 </body>
 </html>
