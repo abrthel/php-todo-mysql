@@ -57,13 +57,15 @@
 <h2>Add a To-Do</h2>
 
 <?php if(!empty($todoForm->messages)) : ?>
-<p>Ohh no! There were some validation errors.</p>
-<ul>
-  <?php $errors = $todoForm->messages; ?>
-  <?php foreach($errors as $error) : ?>
-    <li><?= $error ?></li>
-  <? endforeach ?>
-</ul>
+<div class="errors">
+  <p>Ohh no! There were some validation errors.</p>
+  <ul>
+    <?php $errors = $todoForm->messages; ?>
+    <?php foreach($errors as $error) : ?>
+      <li><?= $error ?></li>
+    <? endforeach ?>
+  </ul>
+</div>
 <?php endif ?>
 
 <form action="index.php" method="POST">
@@ -109,7 +111,7 @@
 
 <h2>Overdue</h2>
 <?php if (!empty($overdue)) : ?>
-<table>
+<table class="overdue">
   <?php foreach ($overdue as $task) : ?>
     <tr>
       <td><?= $categories->by_id($task['category_id']) ?></td>

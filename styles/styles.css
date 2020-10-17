@@ -1,0 +1,26 @@
+body {
+  width: 960px;
+  margin: 0 auto;
+}
+
+td form {
+  display: inline;
+}
+
+input {
+  margin-right: 15px;
+}
+
+td {
+  padding: 6px;
+}
+
+tr td {
+  border-bottom: 1px solid black;
+}
+
+
+.errors,
+.overdue {
+  color: red;
+}
