@@ -3,8 +3,7 @@
 class Todos {
   public $conn;
 
-  function __construct($con)
-  {
+  function __construct($con) {
     $this->conn = $con;
   }
 

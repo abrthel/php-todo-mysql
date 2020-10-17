@@ -1,9 +1,9 @@
 <?php
-  require_once dirname(__FILE__).'/config.php';
-  require_once dirname(__FILE__).'/includes/todos.php';
-  require_once dirname(__FILE__).'/includes/todo.form.php';
-  require_once dirname(__FILE__).'/includes/todo_action.form.php';
-  require_once dirname(__FILE__).'/includes/categories.php';
+  require dirname(__FILE__).'/config.php';
+  require dirname(__FILE__).'/includes/todos.php';
+  require dirname(__FILE__).'/includes/todo.form.php';
+  require dirname(__FILE__).'/includes/todo_action.form.php';
+  require dirname(__FILE__).'/includes/categories.php';
 
   $connection = new MySQLi(HOST, USER, PASSWORD, DATABASE);
 
@@ -50,9 +50,9 @@
   // echo "</pre>";
 
 
-  echo "<pre>";
-  print_r(date('Y-m-d'));
-  echo "</pre>";
+  // echo "<pre>";
+  // print_r(date('Y-m-d'));
+  // echo "</pre>";
 
   // echo "<pre>";
   // print_r($overdue);
@@ -67,98 +67,88 @@
   $connection->close();
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TODO Application</title>
-</head>
-<body>
+<?php require dirname(__FILE__).'/partials/header.php' ?>
 
-  <h1>My PHP TODO</h1>
+<h1>My PHP TODO</h1>
+<a href="/categories.php">Edit Categories</a>
 
-  <form action="index.php" method="POST">
-    <input type="submit" value="Clear" name="action" />
-  </form>
+<h2>Add a To-Do</h2>
+<form action="index.php" method="POST">
+  <label for="task">Enter a new task:</label>
+  <input type="text" id="task" name="task" />
 
-  <h2>Add a To-Do</h2>
-  <form action="index.php" method="POST">
-    <label for="task">Enter a new task:</label>
-    <input type="text" id="task" name="task" />
+  <label for="date_due">Due Date:</label>
+  <input type="date" id="date_due" name="date_due" />
 
-    <label for="date_due">Due Date:</label>
-    <input type="date" id="date_due" name="date_due" />
-
-    <label for="category">Due Date:</label>
-    <select type="" id="category" name="category">
-      <?php foreach ($allCategories as $index => $value) : ?>
-        <option value="<?= $value['category_id'] ?>"><?= $value['category'] ?></option>
-      <?php endforeach; ?>
-    </select>
-
-    <input type="submit" value="Add to List" />
-  </form>
-
-
-  <h2>Things To Do</h2>
-  <?php if (!empty($active)) : ?>
-  <table>
-    <?php foreach ($active as $index => $task) : ?>
-      <tr>
-        <td><?= $categories->by_id($task['category_id']) ?></td>
-        <td><?= $task['description'] ?></td>
-        <td><?= $task['date_due'] ?></td>
-        <td>
-          <form action="index.php" method="POST" autocomplete="off">
-            <input type="hidden" name="task_id" value="<?= $task['task_id'] ?>">
-            <button type="submit" name="action" value="complete">Complete</button>
-            <button type="submit" name="action" value="remove">X</button>
-          </form>
-        </td>
-      </tr>
+  <label for="category">Due Date:</label>
+  <select type="" id="category" name="category">
+    <?php foreach ($allCategories as $index => $value) : ?>
+      <option value="<?= $value['category_id'] ?>"><?= $value['category'] ?></option>
     <?php endforeach; ?>
-  </table>
-  <?php endif ?>
+  </select>
+
+  <input type="submit" value="Add to List" />
+</form>
 
 
-  <h2>Overdue</h2>
-  <?php if (!empty($overdue)) : ?>
-  <table>
-    <?php foreach ($overdue as $task) : ?>
-      <tr>
-        <td><?= $categories->by_id($task['category_id']) ?></td>
-        <td><?= $task['description'] ?></td>
-        <td><?= $task['date_due'] ?></td>
-        <td>
-          <form action="index.php" method="POST" autocomplete="off">
-            <input type="hidden" name="task_id" value="<?= $task['task_id'] ?>">
-            <button type="submit" name="action" value="complete">Complete</button>
-            <button type="submit" name="action" value="remove">X</button>
-          </form>
-        </td>
-      </tr>
-    <?php endforeach; ?>
-  </table>
-  <?php endif ?>
+<h2>Things To Do</h2>
+<?php if (!empty($active)) : ?>
+<table>
+  <?php foreach ($active as $index => $task) : ?>
+    <tr>
+      <td><?= $categories->by_id($task['category_id']) ?></td>
+      <td><?= $task['description'] ?></td>
+      <td><?= $task['date_due'] ?></td>
+      <td>
+        <form action="index.php" method="POST" autocomplete="off">
+          <input type="hidden" name="task_id" value="<?= $task['task_id'] ?>">
+          <button type="submit" name="action" value="complete">Complete</button>
+          <button type="submit" name="action" value="remove">X</button>
+        </form>
+      </td>
+    </tr>
+  <?php endforeach; ?>
+</table>
+<?php endif ?>
 
-  <h2>Completed</h2>
-  <?php if (!empty($completed)) : ?>
-  <table>
-    <?php foreach ($completed as $task) : ?>
-      <tr>
-        <td><?= $categories->by_id($task['category_id']) ?></td>
-        <td><?= $task['description'] ?></td>
-        <td><?= $task['date_due'] ?></td>
-        <td>
-          <form action="index.php" method="POST" autocomplete="off">
-            <input type="hidden" name="task_id" value="<?= $task['task_id'] ?>">
-            <button type="submit" name="action" value="remove">X</button>
-          </form>
-        </td>
-      </tr>
-    <?php endforeach; ?>
-  </table>
-  <?php endif ?>
-</body>
-</html>
+
+<h2>Overdue</h2>
+<?php if (!empty($overdue)) : ?>
+<table>
+  <?php foreach ($overdue as $task) : ?>
+    <tr>
+      <td><?= $categories->by_id($task['category_id']) ?></td>
+      <td><?= $task['description'] ?></td>
+      <td><?= $task['date_due'] ?></td>
+      <td>
+        <form action="index.php" method="POST" autocomplete="off">
+          <input type="hidden" name="task_id" value="<?= $task['task_id'] ?>">
+          <button type="submit" name="action" value="complete">Complete</button>
+          <button type="submit" name="action" value="remove">X</button>
+        </form>
+      </td>
+    </tr>
+  <?php endforeach; ?>
+</table>
+<?php endif ?>
+
+<h2>Completed</h2>
+<?php if (!empty($completed)) : ?>
+<table>
+  <?php foreach ($completed as $task) : ?>
+    <tr>
+      <td><?= $categories->by_id($task['category_id']) ?></td>
+      <td><?= $task['description'] ?></td>
+      <td><?= $task['date_due'] ?></td>
+      <td>
+        <form action="index.php" method="POST" autocomplete="off">
+          <input type="hidden" name="task_id" value="<?= $task['task_id'] ?>">
+          <button type="submit" name="action" value="remove">X</button>
+        </form>
+      </td>
+    </tr>
+  <?php endforeach; ?>
+</table>
+<?php endif ?>
+
+<?php require dirname(__FILE__).'/partials/footer.php' ?>
