@@ -18,10 +18,6 @@ class TodoForm {
     $this->category_id = filter_var($category_id, FILTER_VALIDATE_INT);
   }
 
-  function messagesFor($field) {
-    return $this->messages[$field] ?? [];
-  }
-
   function to_assoc() {
     return array(
       'description' => $this->description,
@@ -32,25 +28,21 @@ class TodoForm {
 
   function isValid() {
     if(!$this->description) {
-      $this->addMessage('description', "Must provide a task.");
+      $this->addMessage("Must provide a task.");
     }
 
     if(!$this->date_due) {
-      $this->addMessage('date_due', "Must provide a due date.");
+      $this->addMessage("Must provide a due date.");
     }
 
     if(!$this->category_id) {
-      $this->addMessage('category_id', "Must select a valid category.");
+      $this->addMessage("Must select a valid category.");
     }
 
     return empty($this->messages);
   }
 
-  private function addMessage($field, $message) {
-    if(empty($this->messages[$field])) {
-      $this->messages[$field] = [];
-    }
-
-    $this->messages[$field][] = $message;
+  private function addMessage($message) {
+    $this->messages[] = $message;
   }
 }

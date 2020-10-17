@@ -13,7 +13,7 @@
 
   $todos = new Todos($connection);
   $categories = new Categories($connection);
-  $todoForm;
+  $todoForm = new TodoForm('', '', '');
 
   if(filter_input(INPUT_SERVER, 'REQUEST_METHOD') === 'POST') {
 
@@ -37,6 +37,7 @@
 
       if($todoForm->isValid()) {
         $todos->add($todoForm->to_assoc());
+        $todoForm = new TodoForm('', '', '');
       }
     }
   }
@@ -44,25 +45,6 @@
 
   [$active, $overdue, $completed] = $todos->getAll();
   $allCategories = $categories->getAll();
-
-  // echo "<pre>";
-  // print_r($active);
-  // echo "</pre>";
-
-
-  // echo "<pre>";
-  // print_r(date('Y-m-d'));
-  // echo "</pre>";
-
-  // echo "<pre>";
-  // print_r($overdue);
-  // echo "</pre>";
-
-  // echo "<pre>";
-  // print_r($completed);
-  // echo "</pre>";
-
-
 
   $connection->close();
 ?>
@@ -73,19 +55,32 @@
 <a href="/categories.php">Edit Categories</a>
 
 <h2>Add a To-Do</h2>
+
+<?php if(!empty($todoForm->messages)) : ?>
+<p>Ohh no! There were some validation errors.</p>
+<ul>
+  <?php $errors = $todoForm->messages; ?>
+  <?php foreach($errors as $error) : ?>
+    <li><?= $error ?></li>
+  <? endforeach ?>
+</ul>
+<?php endif ?>
+
 <form action="index.php" method="POST">
-  <label for="task">Enter a new task:</label>
-  <input type="text" id="task" name="task" />
 
-  <label for="date_due">Due Date:</label>
-  <input type="date" id="date_due" name="date_due" />
+    <label for="task">Enter a new task:</label>
+    <input type="text" id="task" name="task" value="<?= $todoForm->description ?>"/>
 
-  <label for="category">Due Date:</label>
-  <select type="" id="category" name="category">
-    <?php foreach ($allCategories as $index => $value) : ?>
-      <option value="<?= $value['category_id'] ?>"><?= $value['category'] ?></option>
-    <?php endforeach; ?>
-  </select>
+    <label for="date_due">Due Date:</label>
+    <input type="date" id="date_due" name="date_due" value="<?= $todoForm->date_due ?>" />
+
+    <label for="category">Due Date:</label>
+    <select type="" id="category" name="category">
+      <?php foreach ($allCategories as $index => $value) : ?>
+        <option <?= $value['category_id'] === $todoForm->category_id ? 'selected' : '' ?> value="<?= $value['category_id'] ?>"><?= $value['category'] ?></option>
+      <?php endforeach; ?>
+    </select>
+
 
   <input type="submit" value="Add to List" />
 </form>
