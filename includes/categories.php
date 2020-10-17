@@ -29,11 +29,32 @@ class Categories {
     return $set;
   }
 
-  function add() {}
+  function add($category) {
+    $query = "
+      INSERT INTO categories (category)
+      VALUES (?);
+    ";
 
-  function exit() {}
+    $stmt = $this->conn->prepare($query);
+    $stmt->bind_param("s", $category);
+    if (!$stmt->execute()) {
+      die("DB Query Failed (".$stmt->errno."): ".$stmt->error);
+    }
+  }
 
-  function remove() {}
+  function edit($id, $category) {
+    $query = "
+      UPDATE categories
+      SET category = ?
+      WHERE category_id = ?;
+    ";
+
+    $stmt = $this->conn->prepare($query);
+    $stmt->bind_param("si", $category, $id);
+    if (!$stmt->execute()) {
+      die("DB Query Failed (".$stmt->errno."): ".$stmt->error);
+    }
+  }
 
   function by_id($id) {
     if(empty($this->allCategories)) {
@@ -41,5 +62,36 @@ class Categories {
     }
 
     return $this->allCategories[$id]['category'];
+  }
+
+  function unused_categories() {
+    $query = "
+      SELECT categories.category_id
+      FROM categories
+      LEFT JOIN tasks t on categories.category_id = t.category_id
+      WHERE task_id IS NULL
+    ";
+
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $empty_cats = [];
+    while($value = $result->fetch_assoc()) {
+      $empty_cats[] = $value['category_id'];
+    }
+    return $empty_cats;
+  }
+
+  function remove($id) {
+    $query = "
+      DELETE FROM categories
+      WHERE category_id = ?;
+    ";
+
+    $stmt = $this->conn->prepare($query);
+    $stmt->bind_param("i", $id);
+    if (!$stmt->execute()) {
+      die("DB Query Failed (".$stmt->errno."): ".$stmt->error);
+    }
   }
 }

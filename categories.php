@@ -11,6 +11,7 @@
   $categories = new Categories($connection);
 
   $allCategories = $categories->getAll();
+  $unused_categories = $categories->unused_categories();
 
   $connection->close();
 ?>
@@ -21,13 +22,24 @@
 <a href="/">Back to Todos</a>
 
 <h2></h2>
-<ul>
+<table>
   <?php foreach($allCategories as $category) : ?>
-    <li>
-      <?= $category['category'] ?>
-    </li>
+    <tr>
+      <td>
+        <?= $category['category'] ?>
+      </td>
+      <td>
+        <a href="/category.php?id=<?= $category['category_id'] ?>">Edit</a>
+
+        <?php if(in_array($category['category_id'], $unused_categories)) : ?>
+        <form action="category.php?id=<?= $category['category_id'] ?>">
+          <button type="submit" name="action" value="remove">Remove</button>
+        </form>
+        <?php endif ?>
+      </td>
+    </tr>
   <?php endforeach ?>
-</ul>
+</table>
 <a href="/category.php">Add new Category</a>
 
 <?php require dirname(__FILE__).'/partials/footer.php' ?>

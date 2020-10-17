@@ -10,67 +10,44 @@
 
   $categories = new Categories($connection);
 
-  // if(filter_input(INPUT_SERVER, 'REQUEST_METHOD') === 'POST') {
+  $category_id = null;
+  $category = null;
+  $action = "New Category";
 
-  //   if (!empty($_POST['action'])) {
-  //     $todoActionForm = new TodoActionForm($_POST['action'], $_POST['task_id']);
+  if(isset($_GET['id'])) {
+    $category_id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+    $category = $categories->by_id($category_id);
+    $action = "Edit";
+  }
 
-  //     if($todoActionForm->isValid()) {
-  //       switch($todoActionForm->action) {
-  //         case 'remove':
-  //           $todos->remove($todoActionForm->task_id);
-  //           break;
-  //         case 'complete':
-  //           $todos->complete($todoActionForm->task_id);
-  //           break;
-  //       }
-  //     }
-  //   }
+  if(filter_input(INPUT_SERVER, 'REQUEST_METHOD') === 'POST') {
 
-  //   if (isset($_POST['task'])) {
-  //     $todoForm = new TodoForm($_POST['task'], $_POST['category'], $_POST['date_due']);
+    $category = filter_input(INPUT_POST, 'category', FILTER_SANITIZE_STRING);
+    $category_id = filter_input(INPUT_POST, 'category_id', FILTER_VALIDATE_INT);
 
-  //     if($todoForm->isValid()) {
-  //       $todos->add($todoForm->to_assoc());
-  //     }
-  //   }
-  // }
+    if(!$category_id){
+      $categories->add($category);
+    } else {
+      $categories->edit($category_id, $category);
+    }
 
-  $allCategories = $categories->getAll();
-
-  // echo "<pre>";
-  // print_r($active);
-  // echo "</pre>";
-
-
-  // echo "<pre>";
-  // print_r(date('Y-m-d'));
-  // echo "</pre>";
-
-  // echo "<pre>";
-  // print_r($overdue);
-  // echo "</pre>";
-
-  // echo "<pre>";
-  // print_r($completed);
-  // echo "</pre>";
-
-
+    header('Location: categories.php');
+  }
   $connection->close();
 ?>
 
 <?php require dirname(__FILE__).'/partials/header.php' ?>
 
-<h1>Edit Categories</h1>
+<h1><?= $action ?> <?= $category ?></h1>
 
+<form action="category.php" method="POST">
+  <input type="hidden" name="category_id" value="<?= $category_id ?>" />
 
-<h2></h2>
-<form action="index.php" method="POST">
   <label for="category">Category:</label>
-  <input type="text" id="category" name="category"/>
+  <input type="text" id="category" name="category" value="<?= $category ?>" required/>
 
-  <input type="submit" value="category" />
   <a href="/categories.php">Cancel</a>
+  <button type="submit">Confirm</button>
 </form>
 
 <?php require dirname(__FILE__).'/partials/footer.php' ?>
