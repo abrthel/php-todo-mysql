@@ -11,16 +11,24 @@ input {
   margin-right: 15px;
 }
 
+table {
+  border-collapse: collapse;
+}
+
 td {
   padding: 6px;
 }
 
-tr td {
+tr {
   border-bottom: 1px solid black;
 }
-
 
 .errors,
 .overdue {
   color: red;
+}
+
+
+.completed td {
+  text-decoration-line: line-through;
 }

@@ -37,7 +37,21 @@ class Todos {
     return [$active, $overdue, $completed];
   }
 
-  function clear() {}
+  function clear() {
+    // The intention is to delete all records
+    // the `WHERE 1=1` part is used to avoid the
+    // mariadb unsafe query warning which on my
+    // system prevents the query from running.
+    $query = "
+      DELETE FROM tasks
+      WHERE 1=1;
+    ";
+
+    $stmt = $this->conn->prepare($query);
+    if (!$stmt->execute()) {
+      die("DB Query Failed (".$stmt->errno."): ".$stmt->error);
+    }
+  }
 
   function add($entry) {
     $query = "

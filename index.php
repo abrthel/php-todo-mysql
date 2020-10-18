@@ -28,6 +28,9 @@
           case 'complete':
             $todos->complete($todoActionForm->task_id);
             break;
+          case 'clear':
+            $todos->clear();
+            break;
         }
       }
     }
@@ -53,6 +56,9 @@
 
 <h1>My PHP TODO</h1>
 <a href="/categories.php">Edit Categories</a>
+<form action="/index.php">
+  <button type="submit" name="action" value="clear">Clear all</button>
+</form>
 
 <h2>Add a To-Do</h2>
 
@@ -88,8 +94,8 @@
 </form>
 
 
-<h2>Things To Do</h2>
 <?php if (!empty($active)) : ?>
+<h2>Things To Do</h2>
 <table>
   <?php foreach ($active as $index => $task) : ?>
     <tr>
@@ -109,8 +115,8 @@
 <?php endif ?>
 
 
-<h2>Overdue</h2>
 <?php if (!empty($overdue)) : ?>
+<h2>Overdue</h2>
 <table class="overdue">
   <?php foreach ($overdue as $task) : ?>
     <tr>
@@ -129,9 +135,9 @@
 </table>
 <?php endif ?>
 
-<h2>Completed</h2>
 <?php if (!empty($completed)) : ?>
-<table>
+<h2>Completed</h2>
+<table class="completed">
   <?php foreach ($completed as $task) : ?>
     <tr>
       <td><?= $categories->by_id($task['category_id']) ?></td>
