@@ -13,6 +13,7 @@ input {
 
 table {
   border-collapse: collapse;
+  margin-bottom: 16px;
 }
 
 td {

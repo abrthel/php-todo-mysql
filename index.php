@@ -56,7 +56,8 @@
 
 <h1>My PHP TODO</h1>
 <a href="/categories.php">Edit Categories</a>
-<form action="/index.php">
+<form action="/index.php" method="POST">
+  <input type="hidden" name="task_id" value="-1">
   <button type="submit" name="action" value="clear">Clear all</button>
 </form>
 
@@ -74,7 +75,7 @@
 </div>
 <?php endif ?>
 
-<form action="index.php" method="POST">
+<form action="index.php" method="POST"  autocomplete="off">
 
     <label for="task">Enter a new task:</label>
     <input type="text" id="task" name="task" value="<?= $todoForm->description ?>"/>
@@ -103,7 +104,7 @@
       <td><?= $task['description'] ?></td>
       <td><?= $task['date_due'] ?></td>
       <td>
-        <form action="index.php" method="POST" autocomplete="off">
+        <form action="index.php" method="POST">
           <input type="hidden" name="task_id" value="<?= $task['task_id'] ?>">
           <button type="submit" name="action" value="complete">Complete</button>
           <button type="submit" name="action" value="remove">X</button>

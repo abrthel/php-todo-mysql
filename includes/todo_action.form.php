@@ -10,7 +10,7 @@ class TodoActionForm {
   public $task_id;
 
   public $messages = [];
-  private $known_actions = ['remove', 'complete'];
+  private $known_actions = ['remove', 'complete', 'clear'];
 
   function __construct($action, $task_id) {
     $this->action = filter_var($action, FILTER_SANITIZE_STRING);
